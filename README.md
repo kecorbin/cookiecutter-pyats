@@ -3,6 +3,15 @@ cookiecutter-pyats
 
 A cookiecutter to generate pyATS test cases
 
+
+## usage
+
+```
+pip install cookiecutter
+cookiecutter https://github.com/kecorbin/cookiecutter-pyats
+```
+
+
 ## Background
 This is a complete pyATS exemplary template, intended to standardize the look
 and feel of testscripts across the board, unifying how testcases & libraries
