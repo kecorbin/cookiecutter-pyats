@@ -79,7 +79,7 @@ except ModuleNotFoundError:
 # **********************************
 # * Using Local Libraries
 from libs import {{cookiecutter.project_name}} as {{cookiecutter.project_name }}
-
+import processors.{{ cookiecutter.project_name }} as processors
 
 log = logging.getLogger(__name__)
 
@@ -90,6 +90,9 @@ log = logging.getLogger(__name__)
 # *  any testcase data required should be clearly outlined in its headers, so
 # *  that when inherited, such data can be provided in the actual testscript.
 # *
+@aetest.processors(pre=[processors.pre_processor],
+                   post=[processors.post_processor],
+                   exception=[processors.exception_processor])
 class {{ cookiecutter.testcase_class }}(aetest.Testcase):
     '''{{ cookiecutter.testcase_class}}
 
