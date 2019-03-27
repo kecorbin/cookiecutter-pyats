@@ -3,7 +3,7 @@
     "project_description": "PoC code for doing something really awesome",
     "project_version": "0.1",
     "testcase_class": "MyTestCase",
-
+    "testcase_description": "This tests to make sure something is working",
     "author_name": "John Smith",
     "author_email": "jsmith@company.com"
 }

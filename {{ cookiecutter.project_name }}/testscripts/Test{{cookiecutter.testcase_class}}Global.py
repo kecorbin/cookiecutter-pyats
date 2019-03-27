@@ -66,11 +66,22 @@ __version__ = 2.0
 #
 # imports statements
 #
+import logging
 from ats import aetest
+from ats.log.utils import banner
+from genie.conf import Genie
+
+try:
+    from genie.ops.utils import get_ops
+except ModuleNotFoundError:
+    from genie.ops.base import get_ops
 
 # **********************************
-# * Using Local Library
-from libs import template_library
+# * Using Local Libraries
+from libs import {{cookiecutter.project_name}} as {{cookiecutter.project_name }}
+
+
+log = logging.getLogger(__name__)
 
 # *******************************************************************************
 # * TESTCASE DEFINITIONS
@@ -79,10 +90,10 @@ from libs import template_library
 # *  any testcase data required should be clearly outlined in its headers, so
 # *  that when inherited, such data can be provided in the actual testscript.
 # *
-class TemplateTestcase(aetest.Testcase):
-    '''TemplateTestcase
+class {{ cookiecutter.testcase_class }}(aetest.Testcase):
+    '''{{ cookiecutter.testcase_class}}
 
-    < docstring description of this testcase >
+    {{ cookiecutter.testcase_description }}
 
     Arguments:
         < data required to run this testcase >
@@ -96,9 +107,9 @@ class TemplateTestcase(aetest.Testcase):
     # *  all test sections will be skipped as a consequence.
     @aetest.setup
     def setup(self):
-        '''Testcase Setup
+        '''{{ cookiecutter.testcase_class}} Setup
 
-        < docstring description of this Setup >
+        setup required by {{ cookiecutter.testcase_class}}
         '''
 
         pass
@@ -109,10 +120,10 @@ class TemplateTestcase(aetest.Testcase):
     # *  each testcase contains one or more tests. Each test is run one after
     # *  the other, in their defined order.
     @aetest.test
-    def template_test(self, steps):
-        '''template test
+    def section1(self, steps):
+        '''section1
 
-        < docstring description of this test >
+        section1 description goes here
         '''
 
         # **********************************
@@ -128,7 +139,7 @@ class TemplateTestcase(aetest.Testcase):
             pass
 
         with steps.start('step demo function call') as step:
-            template_library.template_library_function(step)
+            {{ cookiecutter.project_name}}.library_function(step)
 
         with steps.start('step description of step three'):
             pass
@@ -142,7 +153,7 @@ class TemplateTestcase(aetest.Testcase):
     #*  results.
     @aetest.cleanup
     def cleanup(self):
-        '''template cleanup
+        '''{{ cookiecutter.testcase_class}} cleanup
 
         < docstring description of this cleanup >
         '''

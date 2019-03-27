@@ -29,7 +29,7 @@
 #*******************************************************************************
 #* DOCSTRINGS
 #*
-#*   All job files should use the built-in Python docstrings functionality 
+#*   All job files should use the built-in Python docstrings functionality
 #*   to define their headers
 #*
 #* Format:
@@ -37,7 +37,7 @@
 #*   URL= http://sphinxcontrib-napoleon.readthedocs.org/en/latest/index.html
 #*
 #* Read More:
-#*   Python Docstrings, PEP 257: 
+#*   Python Docstrings, PEP 257:
 #*   URL= http://legacy.python.org/dev/peps/pep-0257/
 #*******************************************************************************
 '''template_job.py
@@ -76,8 +76,8 @@ __version__ = 2.0
 #*******************************************************************************
 #* IMPORTS
 #*
-#*   import all modules that are needed in your test script here. Use some 
-#*   form of sorting to make it easy to read. 
+#*   import all modules that are needed in your test script here. Use some
+#*   form of sorting to make it easy to read.
 #*
 #* Convention:
 #*   - one module per import for clarity
@@ -97,6 +97,7 @@ __version__ = 2.0
 # import block
 #
 import os
+import pathlib
 import logging
 import argparse
 
@@ -143,11 +144,11 @@ my_variable = os.environ.get('my_variable', 'default_value')
 #*
 #*  Easypy & AEtest features argument propagation: propagating custom command
 #*  line arguments to jobfile & the testscript. In a nutshell, the requirement
-#*  is simple: parse only what you need using parse_known_args(), leave the 
+#*  is simple: parse only what you need using parse_known_args(), leave the
 #*  rest in sys.argv.
 #*
 #*  If your jobfile requires additional command line arguments, you'll need to
-#*  create an argparse section here. 
+#*  create an argparse section here.
 #*
 #*  note - argparse modules are already imported for your convenience above.
 #*
@@ -167,13 +168,13 @@ parser.add_argument('--argument_b',
 #*******************************************************************************
 #* TESTBED INFORMATION
 #*
-#*  when executing a jobfile using easypy, testbed file should be provided to 
-#*  easypy launcher using argument -testbed_file. Easypy will automatically 
+#*  when executing a jobfile using easypy, testbed file should be provided to
+#*  easypy launcher using argument -testbed_file. Easypy will automatically
 #*  load this provided testbed file into topology objects, and pass it to each
-#*  testscript as script argument "testbed". 
+#*  testscript as script argument "testbed".
 #*       easypy myjobfile.py -testbed_file mytestbed.yaml
 #*
-#*  as long as the argument is used properly, there's nothing extra the user 
+#*  as long as the argument is used properly, there's nothing extra the user
 #*  has to do. Testscripts will automatically be passed the parameter 'testbed',
 #*  along with all the topology objects.
 #*
@@ -181,7 +182,7 @@ parser.add_argument('--argument_b',
 #* TOPOLOGY INFORMATION
 #*
 #*  in an effort to abstract the script's topology/device requirements away
-#*  from the actual testbed being used, user may choose to provide certain 
+#*  from the actual testbed being used, user may choose to provide certain
 #*  alias/uut information as script arguments.
 #*
 #*  the idea behind it is simple: decouple the testscript from hard-coding
@@ -212,7 +213,7 @@ parser.add_argument('--argument_b',
 #*  Handling Multiple Testbeds
 #*  --------------------------
 #*   in the case where your job file is shared across multiple testbeds, you can
-#*   test for the current testbed object and set your topology information 
+#*   test for the current testbed object and set your topology information
 #*   accordingly. Eg:
 #*
 #*      if runtime.testbed:
@@ -252,7 +253,7 @@ tgns = []
 #*
 #*  Each job file must have a main() function where testscripts/task runs are
 #*  defined. After a job file is imported, easypy will lookup main() function
-#*  to run. 
+#*  to run.
 #*
 #*  main() funtion shall have a single argument called 'runtime'. This allows
 #*  the engine to automatically pass in the current Easypy runtime object. The
@@ -263,7 +264,7 @@ tgns = []
 #*
 #*  Examples
 #*  --------
-#*      
+#*
 #*      def main(runtime):
 #*
 #*          # do parse command line job file arguments
@@ -315,14 +316,14 @@ tgns = []
 #*******************************************************************************
 #* SCRIPT ARGUMENTS
 #*
-#*  Aside from standard run() and aetest infrastructure arguments, all other 
+#*  Aside from standard run() and aetest infrastructure arguments, all other
 #*  keyword arguments (*kwargs) to run() api are effectively script arguments.
-#* 
+#*
 #*  Once passed to the testscript, script arguments are updated into testscript
 #*  parameters for this run, accessible throughout script sections using the
-#*  test-parameters feature. In effect, testcase parameters is a superset of 
+#*  test-parameters feature. In effect, testcase parameters is a superset of
 #*  of the testscript parameters, which itself contains jobfile arguments.
-#*      
+#*
 #*          +---------------------------------------------+
 #*          | +----------------------------+     testcase |
 #*          | | +-----------+   testscript |   parameters |
@@ -331,8 +332,8 @@ tgns = []
 #*          | | +-----------+              |              |
 #*          | +----------------------------+              |
 #*          +---------------------------------------------+
-#*  
-#*  if any jobfile arguments names clash with existing testscript parameters, 
+#*
+#*  if any jobfile arguments names clash with existing testscript parameters,
 #*  it will overwrite the one from the testscript. This allows users to set
 #*  default testscript parameters within the script, and use job file arguments
 #*  to overwrite them.
@@ -344,17 +345,24 @@ tgns = []
 #*******************************************************************************
 
 
-# compute the script path from this location
-script_path = os.path.join(os.path.dirname(__file__), '..')
 
-# 
+def get_testscripts():
+    '''Run all test scripts in the testscript directory, test scripts are
+    identified by whether the filename contains `Test` (case-senstive)
+    '''
+    testscript_dir = os.path.join(os.path.dirname(__file__), 'testscripts')
+    p = pathlib.Path(testscript_dir)
+    files = list(p.iterdir())
+    testscripts = [str(f) for f in files if 'Test' in str(f)]
+    return testscripts
+
 # main logic, run testscripts inside
 #
 def main(runtime):
-    
+
     # parse custom command-line arguments
     custom_args = parser.parse_known_args()[0]
- 
+
     #**************************************
     #* Log Levels
     #*
@@ -368,22 +376,15 @@ def main(runtime):
     logging.getLogger('ats.aetest').setLevel('INFO')
     logging.getLogger('libs').setLevel('DEBUG')
 
-    #
-    # run the template script
-    # 
-    run(testscript= os.path.join(script_path, 'template.py'),
-        runtime = runtime,
-        labels = labels,
-        routers = routers,
-        links = links,
-        tgns = tgns)
+    for script in get_testscripts():
+        run(testscript=script,
+            runtime=runtime,
+            labels=labels,
+            routers=routers,
+            links=links,
+            tgns=tgns,
+            **vars(custom_args))
 
-    #
-    # run the variant script with custom args
-    # 
-    run(testscript= os.path.join(script_path, 'variant.py'),
-        runtime = runtime,
-        **vars(custom_args))
 
     #**************************************
     #* Run by ID
@@ -398,9 +399,9 @@ def main(runtime):
     #
     # eg, only run ExampleTestcase
     #
-    run(testscript= os.path.join(script_path, 'template.py'),
-        runtime = runtime,
-        uids = Or('ExampleTestcase'))
+    # run(testscript= os.path.join(script_path, 'template.py'),
+    #     runtime = runtime,
+    #     uids = Or('ExampleTestcase'))
 
     #**************************************
     #* Run by Groups
@@ -413,8 +414,8 @@ def main(runtime):
     #*  http://wwwin-pyats.cisco.com/documentation/html/aetest/control.html
 
     #
-    # eg, only run testcases in group_A 
+    # eg, only run testcases in group_A
     #
-    run(testscript= os.path.join(script_path, 'variant.py'),
-        runtime = runtime,
-        groups = Or('group_A'))
+    # run(testscript= os.path.join(script_path, 'variant.py'),
+    #     runtime = runtime,
+    #     groups = Or('group_A'))

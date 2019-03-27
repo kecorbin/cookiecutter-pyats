@@ -34,7 +34,9 @@
 # *
 # *******************************************************************************
 
-'''template_library.py
+'''{{ cookiecutter.project_name}}.py
+
+Shared code used by  {{ cookiecutter.project_name}}
 
 {{ cookiecutter.project_description }}
 
@@ -47,14 +49,9 @@ Notes:
 
 # optional author information
 __author__ = '{{ cookiecutter.author_name}}'
-__copyright__ = 'Copyright (c) 2018, Cisco Systems Inc.'
-__contact__ = ['pyats-support@cisco.com', 'pyats-support-ext@cisco.com']
-__credits__ = ["Sedy Yadollahi",
-               "Jean-Benoit Aubin",
-               "Ahmad Barghou",
-               "Ke Liu"]
+__contact__ = ["{{ cookiecutter.author_name}}"]
 __date__= 'June 15, 2015'
-__version__ = 2.0
+__version__ = 1.0
 
 #
 # import statements
@@ -76,8 +73,8 @@ logger = logging.getLogger(__name__)
 # *
 # *  to use step in your functions, provide it the current step object, and
 # *  create further step swithin your functions.
-def template_library_function(step):
-    '''template_library_function
+def library_function(step):
+    '''library_function
 
     This function demonstrate the use of steps within function APIs. This
     enables smaller breakdown of functions into smaller steps, and thus
@@ -89,11 +86,11 @@ def template_library_function(step):
 
     '''
 
-    with step.start('function step one'):
+    with step.start('library_function step one'):
         # do some meaningful testing
         pass
 
-    with step.start('function step two'):
+    with step.start('library_function step two'):
         # do some meaningful testing
         pass
 

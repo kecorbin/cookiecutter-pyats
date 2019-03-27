@@ -1,0 +1,104 @@
+testbed:
+  name: devnet_always_on_sandboxes
+
+devices:
+
+  csr1000v:
+    alias: csr1000v
+    os: iosxe
+    type: IOSv
+
+    tacacs:
+      username: root
+
+    passwords:
+      tacacs: "D_Vay!_10&"
+      # enable:
+
+    connections:
+      defaults:
+        class: unicon.Unicon
+      a:
+        protocol: ssh
+        ip: "ios-xe-mgmt.cisco.com"
+        port: 8181
+      netconf:
+        protocol: netconf
+        ip: "ios-xe-mgmt.cisco.com"
+        port: 10000
+      restconf:
+        protocol: restconf
+        ip: "ios-xe-mgmt.cisco.com"
+        port: 9443
+
+    custom:
+      abstraction:
+        order: [os, type]
+
+  ios:
+    alias: ios
+    os: iosxr
+    type: xrv
+
+    tacacs:
+      username: admin
+
+    passwords:
+      tacacs: C1sco12345
+      # enable:
+
+    connections:
+      defaults:
+        class: unicon.Unicon
+      a:
+        protocol: ssh
+        ip: "sbx-iosxr-mgmt.cisco.com"
+        port: 8181
+      netconf:
+        protocol: netconf
+        ip: "sbx-iosxr-mgmt.cisco.com"
+        port: 10000
+
+    custom:
+      abstraction:
+        order: [os, type]
+
+  sbx-n9kv-ao:
+    alias: sbx-n9kv-ao
+    os: nxos
+    type: nxos
+
+    tacacs:
+      username: admin
+
+    passwords:
+      tacacs: "Admin_1234!"
+      # enable:
+
+    connections:
+      defaults:
+        class: unicon.Unicon
+      a:
+        protocol: ssh
+        ip: "sbx-nxos-mgmt.cisco.com"
+        port: 8181
+      netconf:
+        protocol: netconf
+        ip: "sbx-nxos-mgmt.cisco.com"
+        port: 10000
+      # restconf:
+      #   protocol: restconf
+      #   ip: "sbx-nxos-mgmt.cisco.com"
+      #   port: 443
+      nxapi-cli:
+        protocol: nxapi-cli
+        ip: "sbx-nxos-mgmt.cisco.com"
+        port: 443
+      nxapi-rest:
+        protocol: nxapi-rest
+        ip: "sbx-nxos-mgmt.cisco.com"
+        port: 443
+
+    custom:
+      abstraction:
+        order: [os, type]
