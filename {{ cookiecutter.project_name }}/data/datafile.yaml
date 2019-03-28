@@ -1,0 +1,5 @@
+testcases:
+    {{ cookiecutter.testcase_class }}:
+
+        parameters:
+            expected_routes: 35

@@ -17,12 +17,9 @@ Notes:
 '''
 
 # optional author information
-# optional author information
 __author__ = '{{cookiecutter.author_name}}'
-__copyright__ = 'Copyright (c) 2017, Cisco Systems Inc.'
 __contact__ = ['{{cookiecutter.author_email}}']
 __version__ = 1.0
-
 
 #
 # imports statements
@@ -32,14 +29,13 @@ from ats import aetest
 from ats.log.utils import banner
 from genie.conf import Genie
 
-
 try:
     from genie.ops.utils import get_ops
 except ModuleNotFoundError:
     from genie.ops.base import get_ops
 
-# **********************************
-# * Using Local Libraries
+
+# Local libaries which can contain helpers/etc
 from libs import {{cookiecutter.project_name}} as {{cookiecutter.project_name}}
 
 
@@ -61,13 +57,12 @@ class common_setup(aetest.CommonSetup):
                          device=testbed.devices.values())
 
 
-# *******************************************************************************
-# * TESTCASE DEFINITIONS
-# *
-# *  the testcase bodies defined here are to be inherited from your main scripts.
-# *  any testcase data required should be clearly outlined in its headers, so
-# *  that when inherited, such data can be provided in the actual testscript.
-# *
+# TESTCASE DEFINITIONS
+#
+#  the testcase bodies defined here are to be inherited from your main scripts.
+#  any testcase data required should be clearly outlined in its headers, so
+#  that when inherited, such data can be provided in the actual testscript.
+#
 class {{cookiecutter.testcase_class}}Device(aetest.Testcase):
     '''{{ cookiecutter.testcase_class}}
 
@@ -77,46 +72,55 @@ class {{cookiecutter.testcase_class}}Device(aetest.Testcase):
         < data required to run this testcase >
     '''
 
-    # **********************************
-    # * Setup Section
-    # *
-    # *  setup section is optional within each Testcase. It is always run if
-    # *  defined. If the setup section's result is not Passed, Passx or Skipped
-    # *  all test sections will be skipped as a consequence.
+    # Testcase grouping feature enables testcases to be “associated” together by
+    # certain keywords, allowing a testscript execution be limited to only running
+    # testcases of one or more particular groups that matches up to input
+    # criterion.
+    groups = ['device_health']
+
+    # Setup Section
+    #
+    #  setup section is optional within each Testcase. It is always run if
+    #  defined. If the setup section's result is not Passed, Passx or Skipped
+    #  all test sections will be skipped as a consequence.
     @aetest.setup
     def connect_to_device(self, device):
+        '''connect_to_device
+
+        Connects to the device
+        '''
+
         log.info("Connecting to device {}".format(device.name))
         device.connect()
 
-        '''{{ cookiecutter.testcase_class}} Setup
 
-        setup required by {{ cookiecutter.testcase_class}}
-        '''
-
-    # **********************************
-    # * Test Section
-    # *
-    # *  each testcase contains one or more tests. Each test is run one after
-    # *  the other, in their defined order.
+    # Test Section
+    #
+    #  each testcase contains one or more tests. Each test is run one after
+    #  the other, in their defined order.
     @aetest.test
     def collect_info(self, steps, device):
-        '''section1
+        '''collect info
 
-        section1 description goes here
+        this test collects some operational issue from the device being tested
+        this is information is used by later test sections
         '''
-        with steps.start('Check Platform Info'):
-            platform_class = get_ops('platform', device)
-            platform = platform_class(device)
-            platform.learn()
-            log.info("Device Version: {}".format(platform.version))
-            log.info("Serial Number: {}".format(platform.chassis_sn))
 
-
-        with steps.start('Parse Routing Table'):
-            routing_cls = get_ops('routing', device)
+        #  use steps whenever possible they are awesome
+        # steps enables smaller breakdown of functions into smaller steps,
+        # and thus provides finer granuality in your testscript logs.
+        with steps.start('Parse Static Routes'):
+            routing_cls = get_ops('static_routing', device)
             routing = routing_cls(device)
             routing.learn()
             log.info("Routing Info: {}".format(routing.info))
+
+        # with steps.start('Check Platform Info'):
+        #     platform_class = get_ops('platform', device)
+        #     platform = platform_class(device)
+        #     platform.learn()
+        #     log.info("Device Version: {}".format(platform.version))
+        #     log.info("Serial Number: {}".format(platform.chassis_sn))
 
         with steps.start('Parse ARP Table'):
             arp_cls = get_ops('arp', device)
@@ -130,6 +134,11 @@ class {{cookiecutter.testcase_class}}Device(aetest.Testcase):
                  addr=['4.2.2.2', '8.8.8.8'])
     @aetest.test
     def test_dns_reachability(self, device, addr):
+        '''Test DNS reachability
+
+        this test issues a ping to the primary and secondary DNS servers
+        '''
+
         output = device.ping(addr=addr)
         log.info(output)
 
@@ -140,7 +149,7 @@ class {{cookiecutter.testcase_class}}Device(aetest.Testcase):
     def cleanup(self):
         '''{{ cookiecutter.testcase_class}} cleanup
 
-        < docstring description of this cleanup >
+        any other cleanup activities can be done here.
         '''
 
         pass

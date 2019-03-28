@@ -1,5 +1,3 @@
-
-
 '''{{ cookiecutter.project_name}}.py
 
 Shared code used by  {{ cookiecutter.project_name}}
@@ -16,7 +14,6 @@ Notes:
 # optional author information
 # optional author information
 __author__ = '{{cookiecutter.author_name}}'
-__copyright__ = 'Copyright (c) 2017, Cisco Systems Inc.'
 __contact__ = ['{{cookiecutter.author_email}}']
 __version__ = 1.0
 
@@ -41,26 +38,25 @@ logger = logging.getLogger(__name__)
 # *
 # *  to use step in your functions, provide it the current step object, and
 # *  create further step swithin your functions.
-def {{cookiecutter.project_name}}(step):
-    ''' helper / library function
+def {{cookiecutter.project_name}}(steps):
+    ''' helper / library / wrapper function
 
     This function demonstrate the use of steps within function APIs. This
     enables smaller breakdown of functions into smaller steps, and thus
     provides finer granuality in your testscript logs.
+
+    Also makes converting existing python scripts easy.
 
     Arguments
     ---------
         steps   (obj): the step object to be passed in from the testscript
 
     '''
+    # use these to wrap existing code / third-party stuff
+    with steps.start('one small step for man'):
+        logger.info('one small step for man')
 
-    with step.start('testscripts.libs.{{cookiecutter.project_name}} step one'):
-        # do some meaningful testing
-        logger.info('testscripts.libs.{{cookiecutter.project_name}} step one')
-
-    with step.start('testscripts.libs.{{cookiecutter.project_name}} step two'):
-        # do some meaningful testing
-        logger.info('testscripts.libs.{{cookiecutter.project_name}} step two')
-
+    with steps.start('one giant leap for mankind'):
+        logger.info('one giant leap for mankind')
 
     return

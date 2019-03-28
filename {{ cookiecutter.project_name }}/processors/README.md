@@ -21,7 +21,7 @@ to the following.
 @aetest.processors(pre=[processors.pre_processor],
                    post=[processors.post_processor],
                    exception=[processors.exception_processor])
-class {{ cookiecutter.testcase_class }}Global(aetest.Testcase):
+class {{ cookiecutter.testcase_class }}(aetest.Testcase):
 
   ...
 

@@ -11,10 +11,12 @@ devices:
     tacacs:
       username: root
 
-    passwords:
-      tacacs: "D_Vay!_10&"
-      # enable:
 
+    # https://pubhub.devnetcloud.com/media/pyats-packages/docs/unicon/user_guide/passwords.html
+    passwords:
+
+      line: "D_Vay!_10&"
+      tacacs: "D_Vay!_10&"
     connections:
       defaults:
         class: unicon.Unicon

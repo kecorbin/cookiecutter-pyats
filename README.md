@@ -12,55 +12,17 @@ cookiecutter https://github.com/kecorbin/cookiecutter-pyats
 ```
 
 
-## Background
-This is a complete pyATS exemplary template, intended to standardize the look
-and feel of testscripts across the board, unifying how testcases & libraries
-are defined, promoting sharing, cross-team collaboration & etc.
+## rationale
 
-pyATS is a generic test infrastructure open to a wide variety of usages, often
-differing from team to team within Cisco. Thus, the use of this template is
-optional. The intent is to create a set of basic guidelines and rules built
-based-on common software design standards, enforcing modularity, reuseability
-and debug-ability. Keep in mind that the works of test-automation itself is
-still software: using software to test software. Thus, good habits goes a long
-way.
-
-This template goes hand-in-hand with the 'comprehensive' example featured under
-your pyATS install folder: both should be copied to your pyATS instance
-automatically during installation. The example script is written loosely
-following the guidelines in this template, and serves as more of a supplemental
-user-guide for the how-tos w.r.t. each script section feature, in addition to
-demonstrating this template's structure.
-
-This template only covers the 'templating' portion: eg, what goes where. For
-full understanding of how things should be defined and how testscript feature
-works, refer to the user guide at:
-    http://wwwin-pyats.cisco.com/documentation/html/
+This cookiecutter has three objectives.
 
 
-    Folder Structure
-    ----------------
-        <pyats_root>/templates/
-        |-- README
-        |-- template.py
-        |-- variant.py
-        |-- job
-        |   `-- template_job.py
-        |-- etc
-        |   `-- template_testbed.yaml
-        |-- testcases
-        |   |-- __init__.py
-        |   `-- template_testcases.py
-        `-- libs
-            |-- __init__.py
-            `-- template_library.py
+* ##### Provide a great starting point for ambitious use cases.  
+* ##### standardize the look and feel of testscripts
+   Create a set of basic guidelines and rules built based-on common software design standards, enforcing modularity, reuseability and debug-ability. Keep in mind that the works of test-automation itself is still software: using software to test software. Thus, good habits goes a long way towards unifying how testcases & libraries are defined, promoting sharing, cross-team collaboration & etc.
+* ##### Demonstrate some really cool pyats concepts.
+  In doing so, we necessarily add some things which you may or may not need (e.g processors/plugins/etc) for the most part, these don't do much but provide some hooks at key points within the workflow that you may find a usage for. docstrings and comments through the generated code provide guidance on when/why you may want to use them as well as how you would disable or otherwise alter them
 
-Each file listed above contains appropriate headers describing their usages.
-To use the template, copie the whole template directory to your script directory
-and rename accordingly.
+## Developing / Testing
 
-Example
--------
-    bash$ cp -r $VIRTUAL_ENV/templates/* $VIRTUAL_ENV/xbu_shared/module/script/
-
---------------------------------------------------------------------------------
+we gladly accept pull requests.  

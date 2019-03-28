@@ -14,5 +14,9 @@ def post_processor(section):
 # define another function that prints the exception message and suppress the
 # exception
 def exception_processor(section, exc_type, exc_value, exc_traceback):
-    print('exception processor: ', exc_type, exc_value)
+
+    logger.info('Exception Processor Handling : {}:{}'.format(exc_type,
+                                                     exc_value))
+
+    # apply some corrective action
     return True

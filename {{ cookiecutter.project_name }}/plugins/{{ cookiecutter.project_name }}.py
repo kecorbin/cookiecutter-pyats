@@ -42,8 +42,8 @@ class {{ cookiecutter.project_name }}Plugin(BasePlugin):
         # custom arguments shall always use -- as prefix
         # positional custom arguments are NOT allowed.
         parser.add_argument('--print-timestamp',
-                            action = 'store_true',
-                            default = False)
+                            action='store_true',
+                            default=False)
 
     # plugins may define its own class constructor __init__, though, it
     # must respect the parent __init__, so super() needs to be called.
@@ -73,7 +73,10 @@ class {{ cookiecutter.project_name }}Plugin(BasePlugin):
 
         if self.runtime.args.print_timestamp:
             self.job_end = datetime.datetime.now()
-            logger.info('Job run took: %s' % self.job_end - self.job_start)
+            logger.info("Job Start: {}".format(self.job_start))
+            logger.info("Job Stop: {}".format(self.job_end))
+            time = self.job_end - self.job_start
+            logger.info('Job run took: {}'.format(time))
 
         logger.info('Post-Job %s: Hello World!' % job.name)
 
@@ -90,7 +93,8 @@ class {{ cookiecutter.project_name }}Plugin(BasePlugin):
     def post_task(self, task):
         if self.runtime.args.print_timestamp:
             self.task_end = datetime.datetime.now()
-            logger.info('Task run took: %s' %
-                        self.task_end - self.task_start)
+            time = self.task_end - self.task_start
+            logger.info('Task run took: %s'.format(time) )
+
 
         logger.info('Post-Task %s: Hello World!' % task.taskid)
