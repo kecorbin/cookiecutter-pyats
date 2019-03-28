@@ -1,1 +1,3 @@
-# python requirements
+# you should consider locking these, but for now we'll assume you want the latest
+# if you are running in docker, only additional dependencies are required here
+# as the base image contains pyats/genie

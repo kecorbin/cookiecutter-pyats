@@ -1,10 +1,4 @@
-# Processors
-# --------
-#
-#   {{ cookiecutter.project_name }} plugin
-#
-#  for documentation about processors see:
-#  https://pubhub.devnetcloud.com/media/pyats/docs/aetest/processors.html
+
 import logging
 
 logger = logging.getLogger("{{ cookiecutter.project_name }}_PROCESSORS".upper())

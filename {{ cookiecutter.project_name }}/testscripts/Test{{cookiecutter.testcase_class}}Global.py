@@ -53,15 +53,11 @@ Notes:
 '''
 
 # optional author information
-__author__ = 'Cisco Systems Inc.'
+__author__ = '{{cookiecutter.author_name}}'
 __copyright__ = 'Copyright (c) 2017, Cisco Systems Inc.'
-__contact__ = ['pyats-support@cisco.com', 'pyats-support-ext@cisco.com']
-__credits__ = ["Sedy Yadollahi",
-               "Jean-Benoit Aubin",
-               "Ahmad Barghou",
-               "Ke Liu"]
-__date__ = 'June 15, 2015'
-__version__ = 2.0
+__contact__ = ['{{cookiecutter.author_email}}']
+__version__ = 1.0
+
 
 #
 # imports statements
@@ -78,8 +74,8 @@ except ModuleNotFoundError:
 
 # **********************************
 # * Using Local Libraries
-from libs import {{cookiecutter.project_name}} as {{cookiecutter.project_name }}
-import processors.{{ cookiecutter.project_name }} as processors
+import libs.{{cookiecutter.project_name}}
+import processors.{{cookiecutter.project_name}} as processors
 
 log = logging.getLogger(__name__)
 
@@ -90,10 +86,12 @@ log = logging.getLogger(__name__)
 # *  any testcase data required should be clearly outlined in its headers, so
 # *  that when inherited, such data can be provided in the actual testscript.
 # *
+# * Docs
+# * https://pubhub.devnetcloud.com/media/pyats/docs/aetest/structure.html#testcases
 @aetest.processors(pre=[processors.pre_processor],
                    post=[processors.post_processor],
                    exception=[processors.exception_processor])
-class {{ cookiecutter.testcase_class }}(aetest.Testcase):
+class {{ cookiecutter.testcase_class }}Global(aetest.Testcase):
     '''{{ cookiecutter.testcase_class}}
 
     {{ cookiecutter.testcase_description }}
@@ -136,17 +134,19 @@ class {{ cookiecutter.testcase_class }}(aetest.Testcase):
         # *  so provides more visual clues of the actions taken of each section
         # *  and so on.
         # *
-        # *  Steps is applicable to subsections, setups, tests and cleanups.
+        # *  Steps is applicable to subsections, setups, tests and cleanups
+        # *
+        # *  Full documentation here:
+        # *  https://pubhub.devnetcloud.com/media/pyats/docs/aetest/steps.html
+        with steps.start('one small step for [a] man'):
+            log.info('one small step for [a] man')
 
-        with steps.start('step description of step one'):
-            pass
+        with steps.start('one giant leap for mankind'):
+            log.info('one giant leap for mankind')
 
-        with steps.start('step demo function call') as step:
-            {{ cookiecutter.project_name}}.library_function(step)
+        with steps.start('nested steps from external lib') as step:
+            libs.{{ cookiecutter.project_name}}.{{cookiecutter.project_name}}(step)
 
-        with steps.start('step description of step three'):
-            pass
-        # ... etc
 
     #**********************************
     #* Cleanup Section

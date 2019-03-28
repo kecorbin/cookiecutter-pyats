@@ -35,8 +35,8 @@ devices:
       abstraction:
         order: [os, type]
 
-  ios:
-    alias: ios
+  iosxr:
+    alias: iosxr
     os: iosxr
     type: xrv
 

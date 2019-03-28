@@ -1,43 +1,7 @@
-# *******************************************************************************
-# *                              Template Testcases
-# * ----------------------------------------------------------------------------
-# * ABOUT THIS TEMPLATE - Please read
-# *
-# * - Any comments with "#*" in front of them (like this entire comment box) are
-# *   for template clarifications only and should be removed from the final
-# *   product.
-# *
-# * - Anything enclosed in <> must be replaced by the appropriate text for your
-# *   application
-# *
-# * Author:
-# *    Siming Yuan, Automation Strategy - Core Software Group (CSG)
-# *
-# * Support:
-# *    pyats-support@cisco.com
-# *
-# * Description:
-# *  This file contains some template testcases used by template base and variant
-# *  script. It serves as an example demonstrating the usage & benefits of using
-# *  testcase files.
-# *
-# * Note:
-# *   instead of duplicating information, this template file will only expand
-# *   on details where necessary. You may refer to template.py for details.
-# *
-# * Note Also:
-# *   the use of testcase files, and its ideas, are software development
-# *   methodologies, and an optional use-case of pyATS testscripts.
-# *
-# * Read More:
-# *   For the complete and up-to-date user guide on AEtest template, visit:
-# *   URL= https://developer.cisco.com/site/pyats/
-# *
-# *******************************************************************************
 
-'''template_testcases.py
+'''Test{{cookiecutter.testcase_class}}Device.py
 
-< describe your testcases >
+These test cases will be ran against each device in the testbed
 
 Arguments:
     <name> (<type>): <description of your testscript argument>
@@ -53,15 +17,12 @@ Notes:
 '''
 
 # optional author information
-__author__ = 'Cisco Systems Inc.'
+# optional author information
+__author__ = '{{cookiecutter.author_name}}'
 __copyright__ = 'Copyright (c) 2017, Cisco Systems Inc.'
-__contact__ = ['pyats-support@cisco.com', 'pyats-support-ext@cisco.com']
-__credits__ = ["Sedy Yadollahi",
-               "Jean-Benoit Aubin",
-               "Ahmad Barghou",
-               "Ke Liu"]
-__date__ = 'June 15, 2015'
-__version__ = 2.0
+__contact__ = ['{{cookiecutter.author_email}}']
+__version__ = 1.0
+
 
 #
 # imports statements
@@ -88,7 +49,7 @@ log = logging.getLogger("{{ cookiecutter.project_name}}".upper())
 class common_setup(aetest.CommonSetup):
     """ Common Setup section """
 
-    # Mark
+    # Mark this test to run against all devices in the testbed
     @aetest.subsection
     def setup(self, testbed):
         # initalize genie testbed
@@ -98,6 +59,8 @@ class common_setup(aetest.CommonSetup):
         aetest.loop.mark({{cookiecutter.testcase_class}}Device,
                          uids=device_names,
                          device=testbed.devices.values())
+
+
 # *******************************************************************************
 # * TESTCASE DEFINITIONS
 # *
@@ -136,31 +99,39 @@ class {{cookiecutter.testcase_class}}Device(aetest.Testcase):
     # *  each testcase contains one or more tests. Each test is run one after
     # *  the other, in their defined order.
     @aetest.test
-    def section1(self, steps):
+    def collect_info(self, steps, device):
         '''section1
 
         section1 description goes here
         '''
+        with steps.start('Check Platform Info'):
+            platform_class = get_ops('platform', device)
+            platform = platform_class(device)
+            platform.learn()
+            log.info("Device Version: {}".format(platform.version))
+            log.info("Serial Number: {}".format(platform.chassis_sn))
 
-        # **********************************
-        # * Testcase Steps
-        # *
-        # *  testcases should always leverage the steps feature of AEtest.
-        # *  this provides more visual clues of the actions taken of each
-        # *  section and so on.
-        # *
-        # *  Steps is applicable to subsections, setups, tests and cleanups.
 
-        with steps.start('step description of step one'):
-            pass
+        with steps.start('Parse Routing Table'):
+            routing_cls = get_ops('routing', device)
+            routing = routing_cls(device)
+            routing.learn()
+            log.info("Routing Info: {}".format(routing.info))
 
-        with steps.start('step demo function call') as step:
-            # they can also be nested
-            {{cookiecutter.project_name}}.library_function(step)
+        with steps.start('Parse ARP Table'):
+            arp_cls = get_ops('arp', device)
+            arp = arp_cls(device)
+            arp.learn()
+            log.info("ARP Info: {}".format(arp.info))
 
-        with steps.start('step description of step three'):
-            pass
-        # ... etc
+    # looped test section
+    # both iterations are run per testcase iteration
+    @aetest.loop(uids=['ping_primary_dns', 'ping_secondary_dns'],
+                 addr=['4.2.2.2', '8.8.8.8'])
+    @aetest.test
+    def test_dns_reachability(self, device, addr):
+        output = device.ping(addr=addr)
+        log.info(output)
 
     # always run last in a testcase, the cleanup section is optional, and,
     # when defined, runs regardless of previous testcase/setup pass/fail
