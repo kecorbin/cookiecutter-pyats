@@ -79,7 +79,7 @@ except ModuleNotFoundError:
 
 # **********************************
 # * Using Local Libraries
-from libs import {{cookiecutter.project_name}} as {{cookiecutter.project_name }}
+from libs import {{cookiecutter.project_name}} as {{cookiecutter.project_name}}
 
 
 log = logging.getLogger("{{ cookiecutter.project_name}}".upper())
@@ -95,7 +95,7 @@ class common_setup(aetest.CommonSetup):
         testbed = Genie.init(testbed)
         # execute check for each device in the testbed using loops
         device_names = [d for d in testbed.devices.keys()]
-        aetest.loop.mark({{ cookiecutter.testcase_class }}Device,
+        aetest.loop.mark({{cookiecutter.testcase_class}}Device,
                          uids=device_names,
                          device=testbed.devices.values())
 # *******************************************************************************
@@ -105,7 +105,7 @@ class common_setup(aetest.CommonSetup):
 # *  any testcase data required should be clearly outlined in its headers, so
 # *  that when inherited, such data can be provided in the actual testscript.
 # *
-class {{ cookiecutter.testcase_class }}Device(aetest.Testcase):
+class {{cookiecutter.testcase_class}}Device(aetest.Testcase):
     '''{{ cookiecutter.testcase_class}}
 
     {{ cookiecutter.testcase_description }}
@@ -118,7 +118,7 @@ class {{ cookiecutter.testcase_class }}Device(aetest.Testcase):
     # * Setup Section
     # *
     # *  setup section is optional within each Testcase. It is always run if
-    # *  defined. If the setup section's result is not Passed, Passx or Skipped,
+    # *  defined. If the setup section's result is not Passed, Passx or Skipped
     # *  all test sections will be skipped as a consequence.
     @aetest.setup
     def connect_to_device(self, device):
@@ -145,9 +145,9 @@ class {{ cookiecutter.testcase_class }}Device(aetest.Testcase):
         # **********************************
         # * Testcase Steps
         # *
-        # *  testcases should always leverage the steps feature of AEtest. Doing
-        # *  so provides more visual clues of the actions taken of each section
-        # *  and so on.
+        # *  testcases should always leverage the steps feature of AEtest.
+        # *  this provides more visual clues of the actions taken of each
+        # *  section and so on.
         # *
         # *  Steps is applicable to subsections, setups, tests and cleanups.
 
@@ -155,18 +155,16 @@ class {{ cookiecutter.testcase_class }}Device(aetest.Testcase):
             pass
 
         with steps.start('step demo function call') as step:
-            {{ cookiecutter.project_name}}.library_function(step)
+            # they can also be nested
+            {{cookiecutter.project_name}}.library_function(step)
 
         with steps.start('step description of step three'):
             pass
         # ... etc
 
-    #**********************************
-    #* Cleanup Section
-    #*
-    #*  always run last in a testcase, the cleanup section is optional, and,
-    #*  when defined, runs regardless of previous testcase/setup pass/fail
-    #*  results.
+    # always run last in a testcase, the cleanup section is optional, and,
+    # when defined, runs regardless of previous testcase/setup pass/fail
+    # results.
     @aetest.cleanup
     def cleanup(self):
         '''{{ cookiecutter.testcase_class}} cleanup

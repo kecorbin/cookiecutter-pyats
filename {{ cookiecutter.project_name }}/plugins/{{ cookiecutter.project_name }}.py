@@ -21,12 +21,12 @@ class {{ cookiecutter.project_name }}Plugin(BasePlugin):
     # each plugin may have a unique name
     # set it by setting the 'name' class variable.
     # (defaults to the current class name)
-    name = 'HelloWorld'
+    name = '{{ cookiecutter.project_name }}Plugin'
 
     # each plugin may have a parser to parse its own command line arguments.
     # these parsers are expected to add arguments to the main easypy parser
     @classmethod
-    def configure_parser(cls, parser, legacy_cli = False):
+    def configure_parser(cls, parser, legacy_cli=False):
         '''
         plugin parser configurations
 
