@@ -93,7 +93,7 @@ class {{cookiecutter.testcase_class}}Device(aetest.Testcase):
         log.info("Connecting to device {}".format(device.name))
         device.connect()
 
-    @aetest.setup
+    @aetest.test
     def run_show_version(self, device):
         '''run_show_commands
 
