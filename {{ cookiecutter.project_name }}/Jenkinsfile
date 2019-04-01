@@ -1,0 +1,20 @@
+pipeline {
+    agent {
+
+        docker {
+          image 'ciscotestautomation/pyats:latest'
+          args  "--entrypoint='' -u root --privileged"
+          }
+    }
+    stages {
+        stage('run a pyats job in docker') {
+            steps {
+                sh '''#!/bin/bash -l
+                source /pyats/bin/activate
+                ./run.sh
+                '''
+                archiveArtifacts artifacts: 'archive/**', fingerprint: true
+            }
+        }
+    }
+}
