@@ -93,54 +93,64 @@ class {{cookiecutter.testcase_class}}Device(aetest.Testcase):
         log.info("Connecting to device {}".format(device.name))
         device.connect()
 
+    @aetest.setup
+    def run_show_version(self, device):
+        '''run_show_commands
+
+        runs show version on device
+        '''
+
+        log.info("Running show version on {}".format(device.name))
+        device.execute('show version')
+
 
     # Test Section
     #
     #  each testcase contains one or more tests. Each test is run one after
     #  the other, in their defined order.
-    @aetest.test
-    def collect_info(self, steps, device):
-        '''collect info
-
-        this test collects some operational issue from the device being tested
-        this is information is used by later test sections
-        '''
-
-        #  use steps whenever possible they are awesome
-        # steps enables smaller breakdown of functions into smaller steps,
-        # and thus provides finer granuality in your testscript logs.
-        with steps.start('Parse Static Routes'):
-            routing_cls = get_ops('static_routing', device)
-            routing = routing_cls(device)
-            routing.learn()
-            log.info("Routing Info: {}".format(routing.info))
-
-        # with steps.start('Check Platform Info'):
-        #     platform_class = get_ops('platform', device)
-        #     platform = platform_class(device)
-        #     platform.learn()
-        #     log.info("Device Version: {}".format(platform.version))
-        #     log.info("Serial Number: {}".format(platform.chassis_sn))
-
-        with steps.start('Parse ARP Table'):
-            arp_cls = get_ops('arp', device)
-            arp = arp_cls(device)
-            arp.learn()
-            log.info("ARP Info: {}".format(arp.info))
+    # @aetest.test
+    # def collect_info(self, steps, device):
+    #     '''collect info
+    #
+    #     this test collects some operational issue from the device being tested
+    #     this is information is used by later test sections
+    #     '''
+    #
+    #     #  use steps whenever possible they are awesome
+    #     # steps enables smaller breakdown of functions into smaller steps,
+    #     # and thus provides finer granuality in your testscript logs.
+    #     with steps.start('Parse Static Routes'):
+    #         routing_cls = get_ops('static_routing', device)
+    #         routing = routing_cls(device)
+    #         routing.learn()
+    #         log.info("Routing Info: {}".format(routing.info))
+    #
+    #     # with steps.start('Check Platform Info'):
+    #     #     platform_class = get_ops('platform', device)
+    #     #     platform = platform_class(device)
+    #     #     platform.learn()
+    #     #     log.info("Device Version: {}".format(platform.version))
+    #     #     log.info("Serial Number: {}".format(platform.chassis_sn))
+    #
+    #     with steps.start('Parse ARP Table'):
+    #         arp_cls = get_ops('arp', device)
+    #         arp = arp_cls(device)
+    #         arp.learn()
+    #         log.info("ARP Info: {}".format(arp.info))
 
     # looped test section
     # both iterations are run per testcase iteration
-    @aetest.loop(uids=['ping_primary_dns', 'ping_secondary_dns'],
-                 addr=['4.2.2.2', '8.8.8.8'])
-    @aetest.test
-    def test_dns_reachability(self, device, addr):
-        '''Test DNS reachability
-
-        this test issues a ping to the primary and secondary DNS servers
-        '''
-
-        output = device.ping(addr=addr)
-        log.info(output)
+    # @aetest.loop(uids=['ping_primary_dns', 'ping_secondary_dns'],
+    #              addr=['4.2.2.2', '8.8.8.8'])
+    # @aetest.test
+    # def test_dns_reachability(self, device, addr):
+    #     '''Test DNS reachability
+    #
+    #     this test issues a ping to the primary and secondary DNS servers
+    #     '''
+    #
+    #     output = device.ping(addr=addr)
+    #     log.info(output)
 
     # always run last in a testcase, the cleanup section is optional, and,
     # when defined, runs regardless of previous testcase/setup pass/fail
